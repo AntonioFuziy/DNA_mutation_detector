@@ -3,6 +3,7 @@
 
 using namespace std;
 
+//funcao que identifica match da base nitrogenada
 int match(string a, string b){
   if(a == b){
     return 2;
@@ -10,39 +11,43 @@ int match(string a, string b){
   return -1;
 }
 
+//funcao para retornar o valor maximo da matriz
 int get_max_from_matrix(vector<vector<int>> matrix, int m, int n){
   int max = 0;
-  for(int i = 0; i < m; i++){
-    for(int j = 0; j < n; j++){
+  for(int i = 1; i < m; i++){
+    for(int j = 1; j < n; j++){
       if(matrix[i][j] > max){
         max = matrix[i][j];
       }
     }
   }
+  cout << "max " << max << endl;
   return max;
 }
 
+//funcao para calcular smith waterman
 int smith_waterman(vector<vector<int>> H, int m, int n, string a, string b, int w){
-  int diagonal, delecao, insercao;
+  int diagonal, delecao, insercao, max_H;
   // calculando diagonal, delecao e insercao
   for (int i = 1; i < m; i++){
     for (int j = 1; j < n; j++){
       w = match(a, b);
-      cout << w << endl;
-      cout << H[i][j] << endl;
+      // cout << w << endl;
+      // cout << H[i][j] << endl;
       diagonal = H[i-1][j-1] + w;
-      cout << "diagonal" << endl;
-      cout << diagonal << endl;
+      // cout << "diagonal" << endl;
+      // cout << diagonal << endl;
       delecao = H[i-1][j] - 1;
-      cout << "delecao" << endl;
-      cout << delecao << endl;
+      // cout << "delecao" << endl;
+      // cout << delecao << endl;
       insercao = H[i][j-1] - 1;
-      cout << "insercao" << endl;
-      cout << insercao << endl;
+      // cout << "insercao" << endl;
+      // cout << insercao << endl;
       H[i][j] = max(diagonal, max(delecao, max(insercao, 0))); 
     }
   }
-  return get_max_from_matrix(H, m, n);
+  max_H = get_max_from_matrix(H, m, n);
+  return max_H;
 };
 
 int main(){
