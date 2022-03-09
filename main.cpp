@@ -25,8 +25,8 @@ int get_max_from_matrix(vector<vector<int>> matrix, int m, int n){
 int smith_waterman(vector<vector<int>> H, int m, int n, string a, string b, int w){
   int diagonal, delecao, insercao;
   // calculando diagonal, delecao e insercao
-  for (int i = 1; i < m+1; i++){
-    for (int j = 1; j < n+1; j++){
+  for (int i = 1; i < m; i++){
+    for (int j = 1; j < n; j++){
       w = match(a, b);
       cout << w << endl;
       cout << H[i][j] << endl;
