@@ -4,71 +4,66 @@
 using namespace std;
 
 //funcao que identifica match da base nitrogenada
-int match(string a, string b){
+int match(char a, char b){
   if(a == b){
     return 2;
   };
   return -1;
 }
 
-//funcao para retornar o valor maximo da matriz
-int get_max_from_matrix(vector<vector<int>> matrix, int m, int n){
-  int max = 0;
-  for(int i = 1; i < m; i++){
-    for(int j = 1; j < n; j++){
-      if(matrix[i][j] > max){
-        max = matrix[i][j];
-      }
-    }
-  }
-  cout << "max " << max << endl;
-  return max;
-}
-
 //funcao para calcular smith waterman
-int smith_waterman(vector<vector<int>> H, int m, int n, string a, string b, int w){
+vector<vector<int>> smith_waterman(vector<vector<int>> H, int n, int m, string a, string b, int w){
   int diagonal, delecao, insercao, max_H;
   // calculando diagonal, delecao e insercao
-  for (int i = 1; i < m; i++){
-    for (int j = 1; j < n; j++){
-      w = match(a, b);
-      // cout << w << endl;
-      // cout << H[i][j] << endl;
+  for (int i = 1; i < n; i++){
+    for (int j = 1; j < m; j++){
+      w = match(a[i], b[j]);
       diagonal = H[i-1][j-1] + w;
-      // cout << "diagonal" << endl;
-      // cout << diagonal << endl;
       delecao = H[i-1][j] - 1;
-      // cout << "delecao" << endl;
-      // cout << delecao << endl;
       insercao = H[i][j-1] - 1;
-      // cout << "insercao" << endl;
-      // cout << insercao << endl;
-      H[i][j] = max(diagonal, max(delecao, max(insercao, 0))); 
+      H[i][j] = max(diagonal, max(delecao, max(insercao, 0)));
     }
   }
-  max_H = get_max_from_matrix(H, m, n);
-  return max_H;
+  return H;
 };
 
 int main(){
   int n, m, w;
   w = 0;
   string a, b;
+  vector<vector<int>> H;
   cin >> n;
   cin >> m;
   cin >> a;
   cin >> b;
 
+  a = a.insert(0, " ");
+  b = b.insert(0, " ");
+
   //inicializando matriz H com zeros
-  vector<vector<int>> H(m+1, vector<int>(n+1, 0));
+  H.resize(n);
+  for(int i = 0 ; i < n ; i++){
+    H[i].resize(m);
+  }
 
   //printando as entradas do arquivo
   cout << "n: " << n << " m: " << m << endl;
   cout << "a: " << a << " b: " << b << endl;
 
   //chamando a funcao que monta a matriz H e retorna o valor maximo dela
-  int max_from_H = smith_waterman(H, n, m, a, b, w);
-  cout << max_from_H << endl;
+  H = smith_waterman(H, n, m, a, b, w);
+
+  int max_H, max_i, max_j = 0;
+  for(int i = 1; i < n; i++){
+    for(int j = 1; j < m; j++){
+      if(H[i][j] > max_H){
+        max_H = H[i][j];
+        max_i = i;
+        max_j = j;
+      }
+    }
+  }
+  cout << "max " << max_H << endl;
 
   return 0;
 }
