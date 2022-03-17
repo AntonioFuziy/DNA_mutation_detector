@@ -28,6 +28,7 @@ int get_vector_length(vector<alignment> vec){
 
 void show_matrix(vector<vector<int>> H, int n, int m){
   cout << "" << endl;
+  cout << "H Matrix:" << endl;
   for(int i = 0; i < n; i++){
     cout << " " << endl;
     for(int j = 0; j < m; j++){
@@ -78,8 +79,11 @@ int main(){
   }
 
   //printando as entradas do arquivo
+  cout << "" << endl;
   cout << "n: " << n << " m: " << m << endl;
-  cout << "a: " << a << " b: " << b << endl;
+
+  cout << "a: " << a << endl; 
+  cout << "b: " << b << endl;
 
   //chamando a funcao que monta a matriz H e retorna o valor maximo dela
   H = smith_waterman(H, n, m, a, b, w);
@@ -99,7 +103,9 @@ int main(){
       }
     }
   }
-  cout << "max " << max_H << endl;
+  cout << "" << endl;
+  cout << "Score: " << max_H << endl;
+  cout << "" << endl;
 
   // aplicando o alinhamento
   alignment actual_term;
@@ -164,8 +170,8 @@ int main(){
     }
   }
 
-  cout << "first_sequence: " << first_sequence << endl;
-  cout << "second_sequence: " << second_sequence << endl;
+  cout << "First Sequence Generation: " << first_sequence << endl;
+  cout << "Second Sequence Generation: " << second_sequence << endl;
 
   return 0;
 }
