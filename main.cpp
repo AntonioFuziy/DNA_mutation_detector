@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -30,22 +31,13 @@ int return_index(int a, int b, int c){
   return 0;
 }
 
-void show_matrix(vector<vector<alignment>> H, int n, int m){
-  cout << "" << endl;
-  cout << "Matrix H:" << endl;
-  for (int i = 0; i <= n; i++){
-    cout << " " << endl;
-    for (int j = 0; j <= m; j++){
-      cout << H[i][j].value << " ";
-    }
-  }
-  cout << "" << endl;
-}
-
 int main(){
   int n, m, w;
   string a, b;
   vector<vector<alignment>> H;
+
+  ofstream output_file;
+  output_file.open("output.txt");
 
   int max_H = 0;
   int max_j = 0;
@@ -53,13 +45,13 @@ int main(){
 
   cin >> n;
   cin >> m;
-  cout << "" << endl;
-  cout << "n: " << n << " m: " << m << endl;
+  output_file << "" << endl;
+  output_file << "n: " << n << " m: " << m << endl;
 
   cin >> a;
   cin >> b;
-  cout << "a: " << a << endl; 
-  cout << "b: " << b << endl;
+  output_file << "a: " << a << endl; 
+  output_file << "b: " << b << endl;
 
   //inicializando matriz H com zeros
   H.resize(n+1);
@@ -107,12 +99,20 @@ int main(){
   }
   
   //exibindo a matriz H
-  show_matrix(H, n, m);
+  output_file << "" << endl;
+  output_file << "Matrix H:" << endl;
+  for (int i = 0; i <= n; i++){
+    output_file << " " << endl;
+    for (int j = 0; j <= m; j++){
+      output_file << H[i][j].value << " ";
+    }
+  }
+  output_file << "" << endl;
 
   //exibindo o score
-  cout << "" << endl;
-  cout << "Score: " << max_H << endl;
-  cout << "" << endl;
+  output_file << "" << endl;
+  output_file << "Score: " << max_H << endl;
+  output_file << "" << endl;
 
   // aplicando o alinhamento
   alignment actual_term;
@@ -153,8 +153,11 @@ int main(){
   reverse(first_sequence.begin(), first_sequence.end());
   reverse(second_sequence.begin(), second_sequence.end());
 
-  cout << "First Sequence Generation: " << first_sequence << endl;
-  cout << "Second Sequence Generation: " << second_sequence << endl;
+  output_file << "First Sequence Generation: " << first_sequence << endl;
+  output_file << "Second Sequence Generation: " << second_sequence << endl;
+
+  cout << "Go to output.txt file to see the result" << endl;
+  output_file.close();
 
   return 0;
 }
