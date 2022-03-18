@@ -138,11 +138,13 @@ while(actual_term.row > 0 and actual_term.column > 0 and actual_term.value > 0){
 reverse(first_sequence.begin(), first_sequence.end());
 reverse(second_sequence.begin(), second_sequence.end());
 
-cout << "First Sequence Generation: " << first_sequence << endl;
-cout << "Second Sequence Generation: " << second_sequence << endl;
+output_file << "First Sequence Generation: " << first_sequence << endl;
+output_file << "Second Sequence Generation: " << second_sequence << endl;
 ```
 
 Por fim, o output gerado pelo algoritmo deve ser como representado abaixo:
+
+**OBS: O output da solução está no arquivo `output.txt`**
 
 ```bash
 n: 8 m: 8
