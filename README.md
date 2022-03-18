@@ -1,1 +1,7 @@
-# Enunciados dos projetos de Supercomputação do 1o. Semestre/2022
+# Projeto de Supercomputação - Alinhamento de Sequências de DNA
+
+### Aluno: Antonio Fuziy
+
+
+**Relatório sobre o funionamento do algoritmo**
+
