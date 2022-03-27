@@ -43,7 +43,7 @@ string generate_subsequence_a(string seq_a, int k){
     index_a = seq_a.size();
   }
 
-  // cout << "random index for subsequence a: " << index_a << endl;
+  cout << "random index for subsequence a: " << index_a << endl;
 
   while(int(sequence_generated.size()) < k){
     sequence_generated += seq_a[index_a];
@@ -65,7 +65,7 @@ string generate_subsequence_b(string seq_b, int k){
     index_b = seq_b.size();
   }
 
-  // cout << "Random index for subsequence b: " << index_b << endl;
+  cout << "Random index for subsequence b: " << index_b << endl;
 
   while(int(sequence_generated.size()) < k){
     sequence_generated += seq_b[index_b];
@@ -173,7 +173,7 @@ int main(){
   int max_score = 0;
 
   for(int i = 0; i < p; i++){
-    string subsequence_b = generate_subsequence_a(b, k);
+    string subsequence_b = generate_subsequence_b(b, k);
     subsequences_b.push_back(subsequence_b);
     int current_score = calculate_score(subsequence_a, subsequence_b);
     if(current_score > max_score){
