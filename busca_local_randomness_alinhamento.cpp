@@ -20,6 +20,17 @@ int match(char a, char b){
   return -1;
 }
 
+int return_index(int a, int b, int c){
+  if(a >= b and a >= c and a >= 0){
+    return 1;
+  } else if(b >= c and b >= 0){
+    return 2;
+  } else if(c >= 0){
+    return 3;
+  }
+  return 0;
+}
+
 string generate_subsequence_a(string seq_a, int k){
   string sequence_generated;
   random_device rd;
@@ -65,12 +76,65 @@ string generate_subsequence_b(string seq_b, int k){
 }
 
 int calculate_score(string a, string b){
-  int score = 0;
-  for (int i = 0; i < int(a.size()); i++){
-    score += match(a[i], b[i]);
+  vector<vector<alignment>> H;
+  int n = int(a.size());
+  int m = int(b.size());
+  int w = 0;
+  int max_H = 0;
+
+  H.resize(n+1);
+  for(int i = 0; i < n+1; i++){
+    H[i].resize(m+1);
   }
 
-  return score;
+  int diagonal, delecao, insercao;
+  
+  //montando a matriz H
+  for (int i = 1; i <= n; i++){
+    for (int j = 1; j <= m; j++){
+      //retornando match ou unmatch entre os termos das sequências 
+      w = match(a[i-1], b[j-1]);
+      //cálculo da diagonal, deleção e inserção
+      diagonal = H[i-1][j-1].value + w;
+      delecao = H[i-1][j].value - 1;
+      insercao = H[i][j-1].value - 1;
+      H[i][j].direction = return_index(diagonal, delecao, insercao);
+      H[i][j].row = i;
+      H[i][j].column = j;
+
+      // diagonal
+      if(H[i][j].direction == 1){
+        H[i][j].value = diagonal;
+      // delecao
+      } else if(H[i][j].direction == 2){
+        H[i][j].value = delecao;
+      // insercao
+      } else if(H[i][j].direction == 3){
+        H[i][j].value = insercao;
+      } 
+      // 0
+      else {
+        H[i][j].value = 0;
+      }
+
+      //extraindo os valores máximos da matriz H
+      if(H[i][j].value > max_H){
+        max_H = H[i][j].value;
+      }
+    }
+  }
+
+  cout << "" << endl;
+  cout << "Matrix H:" << endl;
+  for (int i = 0; i <= n; i++){
+    cout << " " << endl;
+    for (int j = 0; j <= m; j++){
+      cout << H[i][j].value << " ";
+    }
+  }
+  cout << "" << endl;
+
+  return max_H;
 }
 
 int main(){
@@ -93,7 +157,7 @@ int main(){
   random_device rd;
   unsigned seed = rd();
   default_random_engine generator(seed);
-  uniform_int_distribution<int> distribution(5, 10);
+  uniform_int_distribution<int> distribution(3, 10);
   int k = distribution(generator);
   
   cout << "" << endl;
