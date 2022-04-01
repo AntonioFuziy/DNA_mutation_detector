@@ -25,7 +25,7 @@ string generate_subsequence_a(string seq_a, int k, int n){
     index_a = seq_a.size();
   }
 
-  cout << "Random index for subsequence A: " << index_a << endl;
+  // cout << "Random index for subsequence A: " << index_a << endl;
 
   while(int(sequence_generated.size()) < k){
     sequence_generated += seq_a[index_a];
@@ -47,7 +47,7 @@ string generate_subsequence_b(string seq_b, int k, int m){
     index_b = seq_b.size();
   }
 
-  cout << "Random index for subsequence B: " << index_b << endl;
+  // cout << "Random index for subsequence B: " << index_b << endl;
 
   while(int(sequence_generated.size()) < k){
     sequence_generated += seq_b[index_b];
@@ -89,16 +89,16 @@ int main(){
   uniform_int_distribution<int> distribution(1, n);
   int k = distribution(generator);
   
-  cout << "" << endl;
-  cout << "Size K of subsequences: " << k << endl;
+  // cout << "" << endl;
+  // cout << "Size K of subsequences: " << k << endl;
 
   string subsequence_a = generate_subsequence_a(a, k, n);
-  cout << "Subsequence A generated: " << subsequence_a << endl;
+  // cout << "Subsequence A generated: " << subsequence_a << endl;
 
   int p = distribution(generator);
-  cout << "" << endl;
-  cout << p << " subsequences B gererated" << endl;
-  cout << "" << endl;
+  // cout << "" << endl;
+  // cout << p << " subsequences B gererated" << endl;
+  // cout << "" << endl;
 
   vector<string> subsequences_b;
   int best_sequence_index = 0;
@@ -112,18 +112,18 @@ int main(){
       max_score = current_score;
       best_sequence_index = i;
     }
-    cout << "Subsequence A generated: " << subsequence_a << endl;
-    cout << "Subsequence B generated: " << subsequences_b[i] << endl;
-    cout << "CURRENT SCORE: " << current_score << endl;
-    cout << "" << endl;
+    // cout << "Subsequence A generated: " << subsequence_a << endl;
+    // cout << "Subsequence B generated: " << subsequences_b[i] << endl;
+    // cout << "CURRENT SCORE: " << current_score << endl;
+    // cout << "" << endl;
   }
 
-  cout << "" << endl;
-  cout << "===================================================================" << endl;
+  // cout << "" << endl;
+  // cout << "===================================================================" << endl;
 
-  cout << "" << endl;
+  // cout << "" << endl;
   cout << "Best Score: " << max_score << endl;
-  cout << "Index from best score: " << best_sequence_index << endl;
+  // cout << "Index from best score: " << best_sequence_index << endl;
 
   cout << "" << endl;
   cout << "Sequence A: " << subsequence_a << endl;

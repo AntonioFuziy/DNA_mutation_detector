@@ -99,15 +99,15 @@ int main(){
   }
   
   //exibindo a matriz H
-  cout << "" << endl;
-  cout << "Matrix H:" << endl;
-  for (int i = 0; i <= n; i++){
-    cout << " " << endl;
-    for (int j = 0; j <= m; j++){
-      cout << H[i][j].value << " ";
-    }
-  }
-  cout << "" << endl;
+  // cout << "" << endl;
+  // cout << "Matrix H:" << endl;
+  // for (int i = 0; i <= n; i++){
+  //   cout << " " << endl;
+  //   for (int j = 0; j <= m; j++){
+  //     cout << H[i][j].value << " ";
+  //   }
+  // }
+  // cout << "" << endl;
 
   //exibindo o score
   cout << "" << endl;
@@ -156,7 +156,7 @@ int main(){
   cout << "First Sequence Generation: " << first_sequence << endl;
   cout << "Second Sequence Generation: " << second_sequence << endl;
 
-  cout << "Go to output.txt file to see the result" << endl;
+  // cout << "Go to output.txt file to see the result" << endl;
   // output_file.close();
 
   return 0;
