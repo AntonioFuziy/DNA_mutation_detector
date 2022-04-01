@@ -75,13 +75,13 @@ int main(){
 
   cin >> n;
   cin >> m;
-  cout << "" << endl;
-  cout << "N: " << n << " M: " << m << endl;
+  // cout << "" << endl;
+  // cout << "N: " << n << " M: " << m << endl;
 
   cin >> a;
   cin >> b;
-  cout << "A: " << a << endl; 
-  cout << "B: " << b << endl;
+  // cout << "A: " << a << endl; 
+  // cout << "B: " << b << endl;
 
   random_device rd;
   unsigned seed = rd();
@@ -122,7 +122,8 @@ int main(){
   // cout << "===================================================================" << endl;
 
   // cout << "" << endl;
-  cout << "Best Score: " << max_score << endl;
+  cout << "" << endl;
+  cout << "Score: " << max_score << endl;
   // cout << "Index from best score: " << best_sequence_index << endl;
 
   cout << "" << endl;

@@ -1,0 +1,45 @@
+===============================================================================
+Tempo Smith Waterman Tiny: 0.007233730997540988
+
+Score: 2
+
+Sequence A: -
+Sequence B: -
+
+Tempo Busca Local Randomness Tiny: 0.007115279004210606
+
+Score: 0
+
+Sequence A: -
+Sequence B: C
+
+===============================================================================
+Tempo Smith Waterman Medium: 0.007197326995083131
+
+Score: 10
+
+Sequence A: GCG-T-AC
+Sequence B: GCA-T-AC
+
+Tempo Busca Local Randomness Medium: 0.008483380996040069
+
+Score: 0
+
+Sequence A: -GCG-T-AC-
+Sequence B: CT-G-C-TAG
+
+===============================================================================Tempo Smith Waterman Large: 0.010000131005654112
+
+Score: 72
+
+Sequence A: C-G----TG-GTTC-ACT--CGC-GGGA-A--CT-----TA-A--CT--T--GATATGGC----CG-GG---GG-A-CTCATTG--A-CACT-TGA---A---AGCGCCAG-C---ATAG-CG--GTTCACG
+Sequence B: C-GACC-T-AGTTC-A-TG--GC-AGAA-A---TAAC-G-AGA--CC-AT---A-A-GGCG-TGCGCGGC-AGGAA-CTC---GC-ATCA-T-T-T--AA-TCAACG-CA--CGTTTTA--CCT-GTACAAG
+
+Tempo Busca Local Randomness Large: 0.009076821996131912
+
+
+Score: 11
+
+Sequence A: GGGAACT-TAA-CT-T-GATATGGC-CGGGGGACTCATTG
+Sequence B: TCG-CGGT-AA-AT-TG--TTT-AAACGCTCGA-TCTT-G
+

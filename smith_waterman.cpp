@@ -45,13 +45,13 @@ int main(){
 
   cin >> n;
   cin >> m;
-  cout << "" << endl;
-  cout << "n: " << n << " m: " << m << endl;
+  // cout << "" << endl;
+  // cout << "n: " << n << " m: " << m << endl;
 
   cin >> a;
   cin >> b;
-  cout << "a: " << a << endl; 
-  cout << "b: " << b << endl;
+  // cout << "a: " << a << endl; 
+  // cout << "b: " << b << endl;
 
   //inicializando matriz H com zeros
   H.resize(n+1);
@@ -153,8 +153,8 @@ int main(){
   reverse(first_sequence.begin(), first_sequence.end());
   reverse(second_sequence.begin(), second_sequence.end());
 
-  cout << "First Sequence Generation: " << first_sequence << endl;
-  cout << "Second Sequence Generation: " << second_sequence << endl;
+  cout << "Sequence A: " << first_sequence << endl;
+  cout << "Sequence B: " << second_sequence << endl;
 
   // cout << "Go to output.txt file to see the result" << endl;
   // output_file.close();
