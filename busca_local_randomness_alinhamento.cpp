@@ -192,8 +192,8 @@ int main(){
   cout << "===================================================================" << endl;
 
   cout << "" << endl;
-  cout << "Best Score: " << max_score << endl;
-  cout << "Index from best score: " << best_sequence_index << endl;
+  cout << "BEST SCORE: " << max_score << endl;
+  cout << "INDEX FROM BEST SCORE: " << best_sequence_index << endl;
 
   cout << "" << endl;
   cout << "Sequence A: " << subsequence_a << endl;

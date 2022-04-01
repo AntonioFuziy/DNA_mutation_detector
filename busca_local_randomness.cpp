@@ -6,13 +6,6 @@
 
 using namespace std;
 
-struct alignment{
-  int row; //linha do termo da matriz
-  int column; //coluna do termo da matriz
-  int direction; //direcao da dos termos da matriz
-  int value; //valor armazenado no termo da matriz
-};
-
 int match(char a, char b){
   if(a == b){
     return 2;
@@ -20,19 +13,19 @@ int match(char a, char b){
   return -1;
 }
 
-string generate_subsequence_a(string seq_a, int k){
+string generate_subsequence_a(string seq_a, int k, int n){
   string sequence_generated;
   random_device rd;
   unsigned seed = rd();
   default_random_engine generator(seed);
-  uniform_int_distribution<int> distribution(0, 10);
+  uniform_int_distribution<int> distribution(0, n-k);
 
   int index_a = distribution(generator);
   if(index_a > int(seq_a.size())){
     index_a = seq_a.size();
   }
 
-  cout << "random index for subsequence a: " << index_a << endl;
+  cout << "Random index for subsequence A: " << index_a << endl;
 
   while(int(sequence_generated.size()) < k){
     sequence_generated += seq_a[index_a];
@@ -42,19 +35,19 @@ string generate_subsequence_a(string seq_a, int k){
   return sequence_generated;
 }
 
-string generate_subsequence_b(string seq_b, int k){
+string generate_subsequence_b(string seq_b, int k, int m){
   string sequence_generated;
   random_device rd;
   unsigned seed = rd();
   default_random_engine generator(seed);
-  uniform_int_distribution<int> distribution(0, 10);
+  uniform_int_distribution<int> distribution(0, m-k);
 
   int index_b = distribution(generator);
   if(index_b > int(seq_b.size())){
     index_b = seq_b.size();
   }
 
-  cout << "Random index for subsequence b: " << index_b << endl;
+  cout << "Random index for subsequence B: " << index_b << endl;
 
   while(int(sequence_generated.size()) < k){
     sequence_generated += seq_b[index_b];
@@ -83,45 +76,46 @@ int main(){
   cin >> n;
   cin >> m;
   cout << "" << endl;
-  cout << "n: " << n << " m: " << m << endl;
+  cout << "N: " << n << " M: " << m << endl;
 
   cin >> a;
   cin >> b;
-  cout << "a: " << a << endl; 
-  cout << "b: " << b << endl;
+  cout << "A: " << a << endl; 
+  cout << "B: " << b << endl;
 
   random_device rd;
   unsigned seed = rd();
   default_random_engine generator(seed);
-  uniform_int_distribution<int> distribution(5, 10);
+  uniform_int_distribution<int> distribution(1, n);
   int k = distribution(generator);
   
   cout << "" << endl;
-  cout << "size k of subsequences: " << k << endl;
+  cout << "Size K of subsequences: " << k << endl;
 
-  string subsequence_a = generate_subsequence_a(a, k);
-  cout << "subsequence_a generated: " << subsequence_a << endl;
+  string subsequence_a = generate_subsequence_a(a, k, n);
+  cout << "Subsequence A generated: " << subsequence_a << endl;
 
   int p = distribution(generator);
+  cout << "" << endl;
+  cout << p << " subsequences B gererated" << endl;
+  cout << "" << endl;
 
   vector<string> subsequences_b;
   int best_sequence_index = 0;
   int max_score = 0;
 
   for(int i = 0; i < p; i++){
-    string subsequence_b = generate_subsequence_b(b, k);
+    string subsequence_b = generate_subsequence_b(b, k, m);
     subsequences_b.push_back(subsequence_b);
     int current_score = calculate_score(subsequence_a, subsequence_b);
     if(current_score > max_score){
       max_score = current_score;
       best_sequence_index = i;
     }
-    cout << "Current Score: " << current_score << endl;
+    cout << "Subsequence A generated: " << subsequence_a << endl;
+    cout << "Subsequence B generated: " << subsequences_b[i] << endl;
+    cout << "CURRENT SCORE: " << current_score << endl;
     cout << "" << endl;
-  }
-
-  for(int i = 0; i < p; i++){
-    cout << "subsequence_b generated: " << subsequences_b[i] << endl;
   }
 
   cout << "" << endl;
