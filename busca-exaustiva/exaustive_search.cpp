@@ -65,7 +65,7 @@ int main(){
           subsequence_a = subsequences_a[i];
           subsequence_b = subsequences_b[j];
         }
-      } else if(int(subsequence_a.size()) > int(subsequence_b.size())) {
+      } else if(int(subsequences_a[i].size()) > int(subsequences_b[j].size())) {
         greater_sequence = subsequence_a;
         minor_sequence = subsequence_b;
 
@@ -77,7 +77,7 @@ int main(){
             subsequence_b = minor_sequence;
           }
         }
-      } else if(int(subsequence_a.size()) < int(subsequence_b.size())) {
+      } else if(int(subsequences_a[i].size()) < int(subsequences_b[j].size())) {
         minor_sequence = subsequence_a;
         greater_sequence = subsequence_b;
 
