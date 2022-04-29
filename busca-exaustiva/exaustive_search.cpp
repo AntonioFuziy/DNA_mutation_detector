@@ -44,8 +44,10 @@ int main(){
 
   cout << "A size: " << n << endl;
   cout << "B size: " << m << endl;
+  cout << "" << endl;
   cout << "A: " << a << endl;
   cout << "B: " << b << endl;
+  cout << "" << endl;
 
   vector<string> subsequences_a = generate_subsequences(a);
   vector<string> subsequences_b = generate_subsequences(b);
@@ -65,30 +67,31 @@ int main(){
           subsequence_a = subsequences_a[i];
           subsequence_b = subsequences_b[j];
         }
-      } else if(int(subsequences_a[i].size()) > int(subsequences_b[j].size())) {
-        greater_sequence = subsequence_a;
-        minor_sequence = subsequence_b;
+      // } else if(int(subsequences_a[i].size()) > int(subsequences_b[j].size())) {
+      //   greater_sequence = subsequence_a;
+      //   minor_sequence = subsequence_b;
 
-        for(int i = 0; i < (int(greater_sequence.size()) - int(minor_sequence.size())); i++){
-          score = calculate_score(minor_sequence, greater_sequence.substr(i, int(minor_sequence.size())));
-          if(score > max_score){
-            max_score = score;
-            subsequence_a = greater_sequence.substr(i, int(minor_sequence.size()));
-            subsequence_b = minor_sequence;
-          }
-        }
-      } else if(int(subsequences_a[i].size()) < int(subsequences_b[j].size())) {
-        minor_sequence = subsequence_a;
-        greater_sequence = subsequence_b;
+      //   for(int i = 0; i < (int(greater_sequence.size()) - int(minor_sequence.size())); i++){
+      //     score = calculate_score(minor_sequence, greater_sequence.substr(i, int(minor_sequence.size())));
+      //     if(score > max_score){
+      //       max_score = score;
+      //       subsequence_a = greater_sequence.substr(i, int(minor_sequence.size()));
+      //       subsequence_b = minor_sequence;
+      //     }
+      //   }
+      // } else if(int(subsequences_a[i].size()) < int(subsequences_b[j].size())) {
+      //   minor_sequence = subsequence_a;
+      //   greater_sequence = subsequence_b;
 
-        for(int i = 0; i < (int(greater_sequence.size()) - int(minor_sequence.size())); i++){
-          score = calculate_score(minor_sequence, greater_sequence.substr(i, int(minor_sequence.size())));
-          if(score > max_score){
-            max_score = score;
-            subsequence_a = minor_sequence;
-            subsequence_b = greater_sequence.substr(i, int(minor_sequence.size()));
-          }
-        }
+      //   for(int i = 0; i < (int(greater_sequence.size()) - int(minor_sequence.size())); i++){
+      //     score = calculate_score(minor_sequence, greater_sequence.substr(i, int(minor_sequence.size())));
+      //     if(score > max_score){
+      //       max_score = score;
+      //       subsequence_a = minor_sequence;
+      //       subsequence_b = greater_sequence.substr(i, int(minor_sequence.size()));
+      //     }
+      //   }
+      // }
       }
     }
   }
