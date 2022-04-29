@@ -70,35 +70,30 @@ int main(){
   int n, m;
   string a, b;
 
-  // ofstream output_file;
-  // output_file.open("output_busca_local.txt");
-
   cin >> n;
   cin >> m;
-  // cout << "" << endl;
-  // cout << "N: " << n << " M: " << m << endl;
 
   cin >> a;
   cin >> b;
-  // cout << "A: " << a << endl; 
-  // cout << "B: " << b << endl;
+
+  if(n > m){
+    string change_a = a;
+    a = b;
+    b = change_a;
+    int change_n = n;
+    n = m;
+    m = change_n; 
+  }
 
   random_device rd;
   unsigned seed = rd();
   default_random_engine generator(seed);
   uniform_int_distribution<int> distribution(1, n);
   int k = distribution(generator);
-  
-  // cout << "" << endl;
-  // cout << "Size K of subsequences: " << k << endl;
 
   string subsequence_a = generate_subsequence_a(a, k, n);
-  // cout << "Subsequence A generated: " << subsequence_a << endl;
 
   int p = distribution(generator);
-  // cout << "" << endl;
-  // cout << p << " subsequences B gererated" << endl;
-  // cout << "" << endl;
 
   vector<string> subsequences_b;
   int best_sequence_index = 0;
@@ -112,19 +107,10 @@ int main(){
       max_score = current_score;
       best_sequence_index = i;
     }
-    // cout << "Subsequence A generated: " << subsequence_a << endl;
-    // cout << "Subsequence B generated: " << subsequences_b[i] << endl;
-    // cout << "CURRENT SCORE: " << current_score << endl;
-    // cout << "" << endl;
   }
 
-  // cout << "" << endl;
-  // cout << "===================================================================" << endl;
-
-  // cout << "" << endl;
   cout << "" << endl;
   cout << "Score: " << max_score << endl;
-  // cout << "Index from best score: " << best_sequence_index << endl;
 
   cout << "" << endl;
   cout << "Sequence A: " << subsequence_a << endl;
