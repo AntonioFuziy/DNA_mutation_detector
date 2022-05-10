@@ -78,7 +78,7 @@ int main(){
 
   omp_set_num_threads(4);
 
-  #pragma omp parallel for shared(subsequences_b, subsequence_a, max_score)
+  #pragma omp parallel for shared(subsequences_b, subsequence_a, max_score, best_sequence_index)
   for(int i = 0; i < p; i++){
     string subsequence_b = generate_subsequence(b, k, m);
     subsequences_b.push_back(subsequence_b);
