@@ -89,16 +89,13 @@ int main(){
     }
   }
 
+  result best_sequences;
+  best_sequences.score = 0;
   #pragma omp parallel for
   for (int i = 0; i < int(sequences_result.size()); i++){
     score = calculate_score(sequences_result[i].a, sequences_result[i].b);
     sequences_result[i].score = score;
-  }
-
-  result best_sequences;
-  best_sequences.score = 0;
-
-  for(int i = 0; i < int(sequences_result.size()); i++){
+    #pragma omp critical
     if(sequences_result[i].score > best_sequences.score){
       best_sequences = sequences_result[i];
     }
