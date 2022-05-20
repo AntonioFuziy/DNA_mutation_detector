@@ -82,7 +82,7 @@ int main(){
   #pragma omp parallel for shared(current_score, best_sequence_index, max_score) firstprivate(subsequence_a, subsequences_b)
   for (int episode = 0; episode < all_episodes; episode++){
     subsequence_a = generate_subsequence(a, k, n);
-    cout << episode << endl;
+    // cout << episode << endl;
     p = distribution(generator);
 
     for(int i = 0; i < p; i++){
