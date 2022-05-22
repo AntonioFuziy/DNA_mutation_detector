@@ -53,6 +53,14 @@ int main(){
   cin >> a;
   cin >> b;
 
+  int current_score;
+  int max_score = 0;
+  int p, k;
+  string subsequence_a, subsequence_b;
+  string best_subsequence_a, best_subsequence_b;
+
+  omp_set_num_threads(4);
+
   if(n > m){
     string change_a = a;
     a = b;
@@ -62,39 +70,46 @@ int main(){
     m = change_n; 
   }
 
-  int current_score;
-  int max_score = 0;
-  int best_sequence_index = 0;
-  int p;
-  string subsequence_a;
-  vector<string> subsequences_b;
-
-  omp_set_num_threads(4);
-
   random_device rd;
   unsigned seed = rd();
   default_random_engine generator(seed);
-  uniform_int_distribution<int> distribution(1, n);
-  int k = distribution(generator);
-
+  uniform_int_distribution<int> distribution_n(1, n);
+  uniform_int_distribution<int> distribution_m(1, m);
+  uniform_int_distribution<int> distribution;
   int all_episodes = n*m;
 
-  #pragma omp parallel for shared(current_score, best_sequence_index, max_score) firstprivate(subsequence_a, subsequences_b)
-  for (int episode = 0; episode < all_episodes; episode++){
-    subsequence_a = generate_subsequence(a, k, n);
-    // cout << episode << endl;
-    p = distribution(generator);
+  for(int episode = 0; episode < 100; episode++){
+    if(n > m){
+      distribution = distribution_n;
+    } else {
+      distribution = distribution_m;
+    }
 
-    for(int i = 0; i < p; i++){
-      string subsequence_b = generate_subsequence(b, k, m);
-      subsequences_b.push_back(subsequence_b);
-      current_score = calculate_score(subsequence_a, subsequence_b);
+    k = distribution(generator);
 
-      #pragma omp critical
-      {
-        if(current_score > max_score){
-          max_score = current_score;
-          best_sequence_index = i;
+    #pragma omp parallel for shared(max_score, best_subsequence_a, best_subsequence_b) firstprivate(a, b, subsequence_a, subsequence_b)
+    for (int episode = 0; episode < all_episodes; episode++){
+      subsequence_a = generate_subsequence(a, k, n);
+      cout << "subsequence_a: " << subsequence_a << endl;
+      p = distribution(generator);
+      cout << "p: " << p << endl;
+
+      for(int i = 0; i < p; i++){
+        subsequence_b = generate_subsequence(b, k, m);
+        // subsequences_b.push_back(subsequence_b);
+        cout << "subsequence_b: " << subsequence_b << endl;
+        current_score = calculate_score(subsequence_a, subsequence_b);
+
+        for(int j = 0; j < k; j++){
+          #pragma omp critical
+          {
+            if(current_score > max_score){
+              cout << "New max: " << current_score << endl;
+              max_score = current_score;
+              best_subsequence_a = subsequence_a;
+              best_subsequence_b = subsequence_b;
+            }
+          }
         }
       }
     }
@@ -104,8 +119,8 @@ int main(){
   cout << "Score: " << max_score << endl;
 
   cout << "" << endl;
-  cout << "Sequence A: " << subsequence_a << endl;
-  cout << "Sequence B: " << subsequences_b[best_sequence_index] << endl;
+  cout << "Sequence A: " << best_subsequence_a << endl;
+  cout << "Sequence B: " << best_subsequence_b << endl;
 
   return 0;
 }

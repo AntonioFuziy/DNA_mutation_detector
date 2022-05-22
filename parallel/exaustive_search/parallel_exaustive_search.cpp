@@ -63,6 +63,8 @@ int main(){
   cout << "A: " << a << endl;
   cout << "B: " << b << endl;
   cout << "" << endl;
+  
+  omp_set_num_threads(4);
 
   vector<string> subsequences_a = generate_subsequences(a);
   vector<string> subsequences_b = generate_subsequences(b);
@@ -91,11 +93,11 @@ int main(){
 
   result best_sequences;
   best_sequences.score = 0;
-  #pragma omp parallel for
+  #pragma omp parallel for shared(sequences_result) firstprivate(score)
   for (int i = 0; i < int(sequences_result.size()); i++){
     score = calculate_score(sequences_result[i].a, sequences_result[i].b);
     sequences_result[i].score = score;
-    #pragma omp critical
+    // #pragma omp critical
     if(sequences_result[i].score > best_sequences.score){
       best_sequences = sequences_result[i];
     }
