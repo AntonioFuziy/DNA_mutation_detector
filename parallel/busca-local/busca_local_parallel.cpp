@@ -1,37 +1,24 @@
-#include<iostream>
-#include<algorithm>
-#include<vector>
-#include<random>
-#include<fstream>
-#include<omp.h>
-
+#include <iostream>
+#include <vector>
+#include <string.h>
+#include <algorithm>
+#include <random>
+#include <omp.h>
 using namespace std;
+
+// #define P 100
+
+struct SubstringValue
+{
+    string substring;
+    int score;
+};
 
 int match(char a, char b){
   if(a == b){
     return 2;
-  }
+  };
   return -1;
-}
-
-string generate_subsequence(string seq, int k, int n_m){
-  string sequence_generated;
-  random_device rd;
-  unsigned seed = rd();
-  default_random_engine generator(seed);
-  uniform_int_distribution<int> distribution(0, n_m-k);
-
-  int index = distribution(generator);
-  if(index > int(seq.size())){
-    index = seq.size();
-  }
-
-  while(int(sequence_generated.size()) < k){
-    sequence_generated += seq[index];
-    index++;
-  }
-
-  return sequence_generated;
 }
 
 int calculate_score(string a, string b){
@@ -43,84 +30,115 @@ int calculate_score(string a, string b){
   return score;
 }
 
-int main(){
-  int n, m;
-  string a, b;
+string create_substring(string seq, int index, int random_size)
+{
 
-  cin >> n;
-  cin >> m;
+    string substring;
+    while ((substring.size() < random_size) && (index < seq.size()))
+    {
 
-  cin >> a;
-  cin >> b;
-
-  int current_score;
-  int max_score = 0;
-  int p, k;
-  string subsequence_a, subsequence_b;
-  string best_subsequence_a, best_subsequence_b;
-
-  omp_set_num_threads(4);
-
-  if(n > m){
-    string change_a = a;
-    a = b;
-    b = change_a;
-    int change_n = n;
-    n = m;
-    m = change_n; 
-  }
-
-  random_device rd;
-  unsigned seed = rd();
-  default_random_engine generator(seed);
-  uniform_int_distribution<int> distribution_n(1, n);
-  uniform_int_distribution<int> distribution_m(1, m);
-  uniform_int_distribution<int> distribution;
-  int all_episodes = n*m;
-
-  for(int episode = 0; episode < 100; episode++){
-    if(n > m){
-      distribution = distribution_n;
-    } else {
-      distribution = distribution_m;
+        substring.push_back(seq[index]);
+        index++;
     }
+    return substring;
+}
 
-    k = distribution(generator);
+int main()
+{
+    int n;
+    int m;
+    cin >> n >> m;
 
-    #pragma omp parallel for shared(max_score, best_subsequence_a, best_subsequence_b) firstprivate(a, b, subsequence_a, subsequence_b)
-    for (int episode = 0; episode < all_episodes; episode++){
-      subsequence_a = generate_subsequence(a, k, n);
-      cout << "subsequence_a: " << subsequence_a << endl;
-      p = distribution(generator);
-      cout << "p: " << p << endl;
+    string a;
+    string b;
+    cin >> a;
+    cin >> b;
+    // swap para que o a sempre seje a maior sequência
+    if (m > n)
+    {
+        a.swap(b);
+        swap(n, m);
+    }
+    cout << "n: " << n << endl;
+    cout << "m: " << m << endl;
+    cout << "Seq a: " << a << endl;
+    cout << "Seq b: " << b << endl;
+    cout << endl;
+    random_device rd;
+    unsigned seed = rd();
+    default_random_engine generator(seed);
 
-      for(int i = 0; i < p; i++){
-        subsequence_b = generate_subsequence(b, k, m);
-        // subsequences_b.push_back(subsequence_b);
-        cout << "subsequence_b: " << subsequence_b << endl;
-        current_score = calculate_score(subsequence_a, subsequence_b);
+    vector<SubstringValue> sa_best_values_global;
+    int global_score = -n; // menor valor possível
+    string best_sb;
+    int best_k;
 
-        for(int j = 0; j < k; j++){
-          #pragma omp critical
-          {
-            if(current_score > max_score){
-              cout << "New max: " << current_score << endl;
-              max_score = current_score;
-              best_subsequence_a = subsequence_a;
-              best_subsequence_b = subsequence_b;
+#pragma omp parallel for
+    for (int rep = 0; rep < 100; rep++)
+    {
+        uniform_int_distribution<int> distribution_k(1, m);
+        int k;
+        k = distribution_k(generator);
+        // cout<<endl;
+        // cout<<"k: "<<k<<endl;
+        uniform_int_distribution<int> distribution_b(0, m - k);
+        int index_b = distribution_b(generator);
+        string sb = create_substring(b, index_b, k);
+        // cout<<"Subsequence b: "<<sb<<endl;
+        int p = n - k + 1;
+        // cout<<"p "<<p<<endl;
+        // salvando apenas strings para checar se já há no sa_best_values
+        vector<string> all_seqs;
+        all_seqs.resize(p);
+        vector<SubstringValue> sa_best_values;
+        int score = -n;
+
+        for (int i = 0; i < p; i++)
+        {
+
+            SubstringValue sa_temp;
+            sa_temp.substring = a.substr(i, k);
+            // cout<<sa_temp.substring<<" ";
+
+            // int index_a = distribution_a(generator);
+            // sa_temp.substring = create_substring(a,index_a,k);
+            all_seqs[i] = sa_temp.substring;
+            sa_temp.score = calculate_score(sa_temp.substring, sb);
+#pragma omp critical
+            {
+                if (sa_temp.score > score)
+                {
+                    score = sa_temp.score;
+                    sa_best_values.clear();
+                    sa_best_values.push_back(sa_temp);
+                }
+                else if (sa_temp.score == score)
+                {
+                  sa_best_values.push_back(sa_temp);
+                }
+                // cout<<sa_temp.substring<<" "<< sa_temp.score<<" | " ;
+
+                if (score > global_score)
+                {
+                    global_score = score;
+                    best_sb = sb;
+                    sa_best_values_global = sa_best_values;
+                    best_k = k;
+                }
             }
-          }
         }
-      }
     }
-  }
+    // cout<<"Subsequences a generated and yours scores: [ ";
 
-  cout << "" << endl;
-  cout << "Score: " << max_score << endl;
+    // cout<<"]"<<endl<<endl;
+    cout << "Best k: " << best_k << endl;
+    cout << "Best Subsequence (highers scores) [ ";
+    for (int i = 0; i < sa_best_values_global.size(); i++)
+    {
 
-  cout << "" << endl;
-  cout << "Sequence A: " << best_subsequence_a << endl;
-  cout << "Sequence B: " << best_subsequence_b << endl;
-
-  return 0;
+        cout << sa_best_values_global[i].substring << " | ";
+    }
+    cout << "]" << endl;
+    cout << "Best Score: " << global_score << endl;
+    return 0;
 }

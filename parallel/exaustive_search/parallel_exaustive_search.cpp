@@ -8,7 +8,7 @@
 
 using namespace std;
 
-struct result {
+struct comp_seqs {
   string a;
   string b;
   int score;
@@ -27,12 +27,22 @@ int match(char a, char b){
   return -1;
 }
 
-int calculate_score(string a, string b){
-  int score = 0;
-  for(int i = 0; i < int(a.size()); i++){
-    score += match(a[i], b[i]);
+// int calculate_score(string a, string b){
+//   int score = 0;
+//   for(int i = 0; i < int(a.size()); i++){
+//     score += match(a[i], b[i]);
+//   }
+//   return score;
+// }
+int return_index(int a, int b, int c){
+  if(a >= b and a >= c and a >= 0){
+    return 1;
+  } else if(b >= c and b >= 0){
+    return 2;
+  } else if(c >= 0){
+    return 3;
   }
-  return score;
+  return 0;
 }
 
 vector<string> generate_subsequences(string sequence){
@@ -47,12 +57,50 @@ vector<string> generate_subsequences(string sequence){
   return subsequences;
 }
 
+int calculate_score(string a, string b, int seq_a_size, int seq_b_size, vector<vector<int>> H){
+  int max_H = 0;
+  int w;
+  int diagonal, delecao, insercao, current_index;
+
+  H.resize(seq_a_size+1);
+  for(int i=0; i<=seq_a_size; i++){
+    H[i].resize(seq_b_size+1);
+  }
+  
+  for (int i = 1; i <= seq_a_size; i++){
+    for (int j = 1; j <= seq_b_size; j++){
+      w = match(a[i-1], b[j-1]);
+      diagonal = H[i-1][j-1] + w;
+      delecao = H[i-1][j] - 1;
+      insercao = H[i][j-1] - 1;
+      current_index = return_index(diagonal, delecao, insercao);
+
+      if(current_index == 1){
+        H[i][j] = diagonal;
+      } else if(current_index == 2){
+        H[i][j] = delecao;
+      } else if(current_index == 3){
+        H[i][j] = insercao;
+      } 
+      else {
+        H[i][j] = 0;
+      }
+
+      if(H[i][j] > max_H){
+        max_H = H[i][j];
+      }
+    }
+  }
+  return max_H;
+}
+
 int main(){
   int n;
   int m;
   string a; 
   string b;
   int score = 0;
+  vector<vector<int>> H;
 
   cin >> n >> m;
   cin >> a >> b;
@@ -75,7 +123,7 @@ int main(){
   string greater_sequence;
   string minor_sequence;
 
-  vector<result> sequences_result;
+  vector<comp_seqs> sequences_result;
 
   for(int i = 0; i < int(subsequences_a.size()); i++){
     for(int j = 0; j < int(subsequences_b.size()); j++){
@@ -83,7 +131,7 @@ int main(){
         subsequence_a = subsequences_a[i];
         subsequence_b = subsequences_b[j];
 
-        result sequence_result;
+        comp_seqs sequence_result;
         sequence_result.a = subsequence_a;
         sequence_result.b = subsequence_b;
         sequences_result.push_back(sequence_result);
@@ -91,31 +139,25 @@ int main(){
     }
   }
 
-  result best_sequences;
+  comp_seqs best_sequences;
   best_sequences.score = 0;
-  #pragma omp parallel for shared(sequences_result) firstprivate(score)
+  #pragma omp parallel for
   for (int i = 0; i < int(sequences_result.size()); i++){
-    score = calculate_score(sequences_result[i].a, sequences_result[i].b);
+    n = int(sequences_result[i].a.size());
+    m = int(sequences_result[i].b.size());
+    score = calculate_score(sequences_result[i].a, sequences_result[i].b, n, m, H);
     sequences_result[i].score = score;
-    // #pragma omp critical
+  }
+
+  for(int i = 0; i < int(sequences_result.size()); i++){
     if(sequences_result[i].score > best_sequences.score){
-      best_sequences = sequences_result[i];
+      best_sequences.score = sequences_result[i].score;
+      best_sequences.a = sequences_result[i].a;
+      best_sequences.b = sequences_result[i].b;
     }
   }
 
   cout << "Score: " << best_sequences.score << endl;
-  
-  cout << "Subsequence A: ";
-  for (int i = 0; i < int(best_sequences.a.size()); i++){
-    cout <<  best_sequences.a[i];
-  }
-  cout << endl;
-
-  cout << "Subsequence B: ";
-  for (int i = 0; i < int(best_sequences.b.size()); i++){
-    cout <<  best_sequences.b[i];
-  }
-  cout << endl;
 
   return 0;
 }
