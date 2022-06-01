@@ -9,6 +9,13 @@
 
 using namespace std;
 
+struct sequence_match{
+  __host__ __device__
+  int operator()(const char& a, const &char b){
+    if()
+  }
+};
+
 int main(){
   int m, n;
   string a, b;
@@ -17,10 +24,6 @@ int main(){
   cin >> m;
   cin >> a;
   cin >> b;
-
-  thrust::device_vector<int> calc[2];
-  calc[0].resize(n+1);
-  calc[1].resize(n+1);
 
   thrust::device_vector<char> a_gpu(n);
   thrust::device_vector<char> b_gpu(m);
@@ -32,6 +35,15 @@ int main(){
   for(int i = 0; i < m; i++){
     b_gpu[i] = b[i];
   }
+
+  thrust::device_vector<int> calc[2];
+  calc[0].resize(n+1);
+  calc[1].resize(n+1);
+  
+  thrust::fill(calc[0].begin(), calc[0].end(), 0);
+  thrust::device_vector<char> gpu_vec = a_gpu;
+
+
   
   return 0;
 }
