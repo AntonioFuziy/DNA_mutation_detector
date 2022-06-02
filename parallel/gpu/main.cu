@@ -14,11 +14,31 @@
 using namespace std;
 
 struct begin_end{
-  int start;
-  int size;
+  int start_a;
+  int start_b;
+  int size_a;
+  int size_b;
 };
 
 using namespace std::chrono;
+
+std::vector<begin_end> generate_indexes(int max_size, int min_size){
+  vector<begin_end> indexes;
+  begin_end current_index;
+
+  for(int index = 0; index < min_size; index++){
+    for(int i = 0; i < max_size; i++){
+      for(int j = 0; j < min_size; j++){
+        current_index.start_a = i;
+        current_index.start_b = j;
+        current_index.size_a = i+index;
+        current_index.size_b = j+index;
+        indexes.push_back(current_index);
+      }
+    }
+  }
+  return indexes;
+}
 
 void reportTime(const char* msg, steady_clock::duration span) {
   auto ms = duration_cast<milliseconds>(span);
@@ -47,26 +67,17 @@ int main(){
   std::cin >> b;
 
   int max_size = 0;
+  int min_size = 0;
+  int max_score = 0;
 
-  if(int(a.size() < int(b.size()))){
-    max_size = int(a.size());
-  } else {
-    max_size = int(b.size());
-  }
+  min_size = int(a.size());
+  max_size = int(b.size());
 
-  // for(int index = 0; index < max_size; index++){
-  //   for(int i = 0; i < int(a.size()); i++){
-      
-  //   }
-
-  //   for(int j = 0; j < int(b.size()); j++){
-
-  //   }
-  // }
+  std::vector<begin_end> all_indexes = generate_indexes(max_size, min_size);
 
   thrust::device_vector<char> a_gpu(n);
   thrust::device_vector<char> b_gpu(m);
-  thrust::device_vector<char> all_sequences(max_size);
+  thrust::device_vector<char> all_sequences(min_size);
 
   for(int i = 0; i < n; i++){
     a_gpu[i] = a[i];
@@ -77,19 +88,24 @@ int main(){
   }
 
   ts = steady_clock::now();
-  thrust::transform(
-    a_gpu.begin(), a_gpu.end(),
-    b_gpu.begin(), all_sequences.begin(),
-    sequence_match()
-  );
-  
-  int score = thrust::reduce(all_sequences.begin(), all_sequences.end(), (int) 0, thrust::plus<int>());
+  for(int i = 0; i < int(all_indexes.size()); i++){
+    thrust::transform(
+      a_gpu.begin() + all_indexes[i].start_a, a_gpu.end() + all_indexes[i].size_a,
+      b_gpu.begin() + all_indexes[i].start_b, all_sequences.begin(),
+      sequence_match()
+    );
+   
+    int score = thrust::reduce(all_sequences.begin(), all_sequences.end(), (int) 0, thrust::plus<int>());
+    if (max_score < score){
+      max_score = score;
+    }
+  }
   
   te = steady_clock::now();
   reportTime("Tempo para calculo", te - ts);
   std::cout << std::fixed << std::setprecision(4);
 
-  std::cout << "Score: " << score << endl;
+  std::cout << "Score: " << max_score << endl;
 
   return 0;
 }

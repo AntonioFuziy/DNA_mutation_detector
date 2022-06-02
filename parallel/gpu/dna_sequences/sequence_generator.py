@@ -1,9 +1,9 @@
 import random
 
-max_sequence_length = 1000
+max_sequence_length = 100
 filename = 1
 
-for n in range(20, max_sequence_length + 1, 10):
+for n in range(20, max_sequence_length + 1, 1):
   m = n
   file = f"./all_sequences/dna{filename}.seq"
   f = open(file, 'w')
